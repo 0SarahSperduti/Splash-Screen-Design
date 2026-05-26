@@ -277,8 +277,6 @@ Funcionalidades futuras planejadas:
 
 ---
 
----
-
 # Referências
 
 - Lei nº 7.210/1984 — Lei de Execução Penal
