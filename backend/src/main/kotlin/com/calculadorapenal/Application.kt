@@ -18,13 +18,21 @@ fun Application.module() {
 
     // Serialização JSON
     install(ContentNegotiation) {
-        json(Json { prettyPrint = true; isLenient = true; ignoreUnknownKeys = true })
+        json(
+            Json {
+                prettyPrint = true
+                isLenient = true
+                ignoreUnknownKeys = true
+            }
+        )
     }
 
     // CORS — permite chamadas do app Android e do front React
     install(CORS) {
         anyHost()
+
         allowHeader(HttpHeaders.ContentType)
+
         allowMethod(HttpMethod.Get)
         allowMethod(HttpMethod.Post)
         allowMethod(HttpMethod.Options)
@@ -32,19 +40,34 @@ fun Application.module() {
 
     // Tratamento global de erros
     install(StatusPages) {
+
         exception<IllegalArgumentException> { call, cause ->
+
             call.respond(
                 HttpStatusCode.BadRequest,
-                ErrorResponse("Dados inválidos.", cause.message?.split("; ") ?: emptyList())
+                ErrorResponse(
+                    "Dados inválidos.",
+                    cause.message?.split("; ") ?: emptyList()
+                )
             )
         }
+
         exception<Throwable> { call, cause ->
-            log.error("Erro interno: ${cause.message}")
-            call.respond(HttpStatusCode.InternalServerError, ErrorResponse("Erro interno no servidor."))
+
+            this@module.log.error(
+                "Erro interno: ${cause.message}"
+            )
+
+            call.respond(
+                HttpStatusCode.InternalServerError,
+                ErrorResponse("Erro interno no servidor.")
+            )
         }
     }
 
     configureRoutes()
 
-    log.info("API Calculadora Penal rodando em http://localhost:8080")
+    this@module.log.info(
+        "API Calculadora Penal rodando em http://localhost:8080"
+    )
 }
